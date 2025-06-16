@@ -1,3 +1,4 @@
+#이 파일은 신경쓰지 마세요.
 import os
 import boto3
 from langchain_aws import ChatBedrock
