@@ -8,6 +8,11 @@ from urllib.parse import urlparse, parse_qs
 from config.aws_config import S3_BUCKET, VIDCAP_API_KEY, S3_PREFIX, AWS_REGION, BEDROCK_KB_ID
 from tool.sync_kb import sync_kb # 별도 분리하면 좋음
 
+# 환경변수로 설정할 것 아마도 필요 없음
+#os.environ["S3_BUCKET"] = S3_BUCKET
+#os.environ["S3_PREFIX"] = S3_PREFIX
+#os.environ["VIDCAP_API_KEY"] = VIDCAP_API_KEY
+
 def lambda_handler(event, context):
     try:
         # 1. 이벤트로부터 URL 파싱
