@@ -8,6 +8,11 @@ from urllib.parse import urlparse, parse_qs
 from config.aws_config import S3_BUCKET, VIDCAP_API_KEY, S3_PREFIX, AWS_REGION, BEDROCK_KB_ID
 from tool.sync_kb import sync_kb # 별도 분리하면 좋음
 
+# 환경변수로 설정할 것 아마도 필요 없음
+os.environ["S3_BUCKET"] = S3_BUCKET
+os.environ["S3_PREFIX"] = S3_PREFIX
+os.environ["VIDCAP_API_KEY"] = VIDCAP_API_KEY
+
 def lambda_handler(event, context):
     try:
         # 1. 이벤트로부터 URL 파싱
@@ -26,8 +31,8 @@ def lambda_handler(event, context):
 
         response = requests.get(api_url, params=params, headers=headers)
 
-        print("📡 응답 코드:", response.status_code)
-        print("📡 응답 내용 (RAW):", response.text)  # 추가!!
+        print("lambda 응답 코드:", response.status_code)
+        print("lambda 응답 내용 (RAW):", response.text)  # 추가!!
         
         response.raise_for_status()
         result = response.json()
@@ -44,8 +49,9 @@ def lambda_handler(event, context):
         s3 = boto3.client("s3")
         s3.put_object(Bucket=S3_BUCKET, Key=s3_key, Body=text.encode("utf-8"))
 
-        # S3 업로드 성공 후 동기화
-        sync_kb()
+        # S3 업로드 성공 후 KB 동기화 요청 (로컬 실행 시에는 주석 처리)
+        # result = sync_kb()
+        # print(f"lambda KB 동기화 요청 결과: {result}")
 
         return {
             "statusCode": 200,
@@ -56,7 +62,7 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
-        print("🔥 에러 발생:", str(e))  # 여기 중요!
+        print("lambda 에러 발생:", str(e))  # 여기 중요!
         return {
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})

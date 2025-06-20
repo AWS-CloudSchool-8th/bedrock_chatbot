@@ -19,4 +19,3 @@ def get_llm():
         model_kwargs={"temperature": 0.7}
     )
     return llm
-
