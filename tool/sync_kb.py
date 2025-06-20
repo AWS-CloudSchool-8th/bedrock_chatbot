@@ -16,6 +16,7 @@ def sync_kb():
     # ① 진행 중인 Job 확인
     jobs = kb_client.list_ingestion_jobs(
         knowledgeBaseId=BEDROCK_KB_ID,
+<<<<<<< HEAD
         dataSourceId=BEDROCK_DS_ID
     )
     for job in jobs.get("ingestionJobSummaries", []):
@@ -55,3 +56,7 @@ def sync_kb():
         print("❌ 일반 EXCEPTION 발생")
         print("💥", str(e))
         raise
+=======
+        dataSourceId=" ",  # 연결된 Data Source ID
+    )
+>>>>>>> 981a24c257b8da31c748f11863f4396c00719a2d
